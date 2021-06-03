@@ -132,7 +132,8 @@ class NCDEnterprise:
             'odr': last_payload[4],
             'firmware': last_payload[-4],
             'battery': msbLsb(last_payload[-3], last_payload[-2]) * 0.00322,
-            'battery_percent': str(((msbLsb(last_payload[-3], last_payload[-2]) * 0.00322) - 1.3) / 2.03 * 100) + "%",
+            # 'battery_percent': str(((msbLsb(last_payload[-3], last_payload[-2]) * 0.00322) - 1.3) / 2.03 * 100) + "%",
+            # 'battery_percent': str(((last_payload[-2] * 0.00322) - 1.3) / 2.03 * 100) + "%",
             'counter': 'NA',
             'sensor_type_id': 40,
             'source_address': str(source_address),
@@ -147,6 +148,7 @@ class NCDEnterprise:
             'firmware': payload[1],
             'battery': msbLsb(payload[2], payload[3]) * 0.00322,
             'battery_percent': str(((msbLsb(payload[2], payload[3]) * 0.00322) - 1.3) / 2.03 * 100) + "%",
+
             'counter': payload[4],
             'sensor_type_id': msbLsb(payload[5], payload[6]),
             'source_address': str(source_address),

@@ -33,11 +33,13 @@ def my_custom_callback(sensor_data):
         # print('')
 
         # About Motor 1
-        if sensor_data['sensor_type_id'] == 12 and sensor_data['source_address'] == str("0013A20041C4D793"):
+        # if sensor_data['sensor_type_id'] == 12 and sensor_data['source_address'] == str("0013A20041D20683"):
+        if sensor_data['source_address'] == str("0013A20041D20683"):
             csv_file = open('current_data_1.csv', 'a+')
             csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
                 sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
             csv_file.write(str(sensor_data[prop]) + '\n')
+            print(str(sensor_data['battery_percent']))
             csv_file.close()
 
         elif sensor_data['sensor_type_id'] == 40 and sensor_data['source_address'] == str("0013A20041D2067A"):
@@ -47,10 +49,12 @@ def my_custom_callback(sensor_data):
             csv_file.write(str(sensor_data[prop]) + '\n')
             csv_file.close()
             datalist = re.split(': |, ', str(sensor_data['sensor_data']))
+            print(str(sensor_data['battery_percent'].format()))
 
-    list = data_mysql(now,sensor_data)
-
-    Database.insert_data(conn, list)
+    print(str(sensor_data['battery_percent']))
+    # list = data_mysql(now,sensor_data)
+    #
+    # Database.insert_data(conn, list)
     #
     # exit()
 
