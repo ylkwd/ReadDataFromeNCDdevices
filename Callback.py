@@ -12,11 +12,13 @@ from mysql.connector import errors
 SERIAL_PORT = "COM3"
 BAUD_RATE = 115200
 # print('Running')
-
+#
 conn = Database.connect_database()
 
 
-Database.create_table(conn)
+#
+#
+# Database.create_table(conn)
 
 
 # Function
@@ -35,26 +37,66 @@ def my_custom_callback(sensor_data):
         # About Motor 1
         # if sensor_data['sensor_type_id'] == 12 and sensor_data['source_address'] == str("0013A20041D20683"):
         if sensor_data['source_address'] == str("0013A20041D20683"):
-            csv_file = open('current_data_1.csv', 'a+')
-            csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
-                sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
-            csv_file.write(str(sensor_data[prop]) + '\n')
-            print(str(sensor_data['battery_percent']))
-            csv_file.close()
+            # csv_file = open('current_data_1.csv', 'a+')
+            # csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
+            #     sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
+            # csv_file.write(str(sensor_data[prop]) + '\n')
+            # print(str(sensor_data['battery_percent'][:2]))
+            print("0683")
+            list0 = data_mysql(now, sensor_data)
+            Database.insert_data_vib(conn, list0,"motor2_vib")
+            # csv_file.close()
 
-        elif sensor_data['sensor_type_id'] == 40 and sensor_data['source_address'] == str("0013A20041D2067A"):
-            csv_file = open('vibration_data_1.csv', 'a+')
-            csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
-                sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
-            csv_file.write(str(sensor_data[prop]) + '\n')
-            csv_file.close()
+        elif sensor_data['source_address'] == str("0013A20041D63E83"):
+            # csv_file = open('motor1_vib.csv', 'a+')
+            # csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
+            #     sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
+            # csv_file.write(str(sensor_data[prop]) + '\n')
+            # csv_file.close()
             datalist = re.split(': |, ', str(sensor_data['sensor_data']))
-            print(str(sensor_data['battery_percent'].format()))
+            # print(str(sensor_data['battery_percent'].format()))
 
-    print(str(sensor_data['battery_percent']))
-    # list = data_mysql(now,sensor_data)
-    #
-    # Database.insert_data(conn, list)
+            sensorlist = [now]
+
+            # print(sensor_data)
+            #
+            # print(str(sensor_data['nodeId']))
+            # print(str(sensor_data['firmware']))
+            # print(str(sensor_data['battery_percent']))
+            # print(str(sensor_data['counter']))
+            # print(str(sensor_data['source_address']))
+            # print(str(sensor_data['sensor_data']['channel_1']))
+            # print(str(sensor_data['sensor_data']['channel_2']))
+            # print(str(sensor_data['sensor_data']['channel_3']))
+
+            cur_data(sensorlist,str(sensor_data['nodeId']))
+            cur_data(sensorlist, str(sensor_data['firmware']))
+            cur_data(sensorlist, str(sensor_data['battery_percent'][0:4]))
+            cur_data(sensorlist, str(sensor_data['counter']))
+            cur_data(sensorlist, str(sensor_data['source_address']))
+            cur_data(sensorlist, str(sensor_data['sensor_data']['channel_1']))
+            cur_data(sensorlist, str(sensor_data['sensor_data']['channel_2']))
+            cur_data(sensorlist, str(sensor_data['sensor_data']['channel_3']))
+
+            # print(sensorlist)
+            print("3E83")
+            # list = data_mysql(now, sensor_data)
+            Database.insert_data_cur(conn, sensorlist,"motor1_cur")
+
+        elif sensor_data['source_address'] == str("0013A20041D2067A"):
+            # csv_file = open('motor1_vib.csv', 'a+')
+            # csv_file.write(now + ',' + str(sensor_data['source_address']) + ',' + str(
+            #     sensor_data['sensor_data']) + ',' + str(sensor_data['battery_percent']) + '\n')
+            # csv_file.write(str(sensor_data[prop]) + '\n')
+            # csv_file.close()
+            datalist = re.split(': |, ', str(sensor_data['sensor_data']))
+            # print(str(sensor_data['battery_percent'].format()))
+            print(str(sensor_data['battery_percent'][:2]))
+            print("067A")
+            list = data_mysql(now, sensor_data)
+            Database.insert_data_vib(conn, list,"motor1_vib")
+    # print(str(sensor_data['battery_percent']))
+
     #
     # exit()
 
@@ -79,16 +121,21 @@ def my_custom_callback(sensor_data):
     #     csv_file.close()
 
 
-def data_mysql(time,sensor_data):
+def cur_data(sensorlist, sensor_data):
+    sensorlist.append(sensor_data)
+    # print(sensorlist)
+
+
+def data_mysql(time, sensor_data):
     count = 0
-    sensorlist=[time]
+    sensorlist = [time]
     datalist = re.split(': |, |}}|{|\s ', str(sensor_data))
     # print(sensor_data)
     count1 = 0
     # print(datalist)
     for x in datalist:
         # print(x)
-        if count%2 ==0 and count !=18 and count!=0:
+        if count % 2 == 0 and count != 18 and count != 0:
             # print(x)
             # print(count)
             sensorlist.append(x)
@@ -115,7 +162,6 @@ def data_mysql(time,sensor_data):
     # print(sensorlist[18])
     # print(sensorlist)
     return sensorlist
-
 
 
 # Error callbacks are only supported for the vibration time series data sets currently
