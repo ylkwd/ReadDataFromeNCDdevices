@@ -46,6 +46,7 @@ def my_custom_callback(sensor_data):
             list0 = data_mysql(now, sensor_data)
             Database.insert_data_vib(conn, list0,"motor2_vib")
             # csv_file.close()
+            #testing
 
         elif sensor_data['source_address'] == str("0013A20041D63E83"):
             # csv_file = open('motor1_vib.csv', 'a+')
