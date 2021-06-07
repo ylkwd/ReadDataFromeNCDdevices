@@ -30,10 +30,7 @@ def create_table_cur(conn, table_name):
     mycursor.execute("DROP TABLE IF EXISTS {table_name}".format(table_name=table_name))
     sql = """CREATE TABLE IF NOT EXISTS {table_name} (Id INT AUTO_INCREMENT PRIMARY KEY,
         time VARCHAR(255),
-        nodeId VARCHAR(255),
-        firmware VARCHAR(255),
         Battery VARCHAR(255),
-        counter VARCHAR(255),
         source_address VARCHAR(255),
         I_a VARCHAR(255),
         I_b VARCHAR(255),
@@ -50,10 +47,7 @@ def create_table_vib(conn, table_name):
     mycursor.execute("DROP TABLE IF EXISTS {table_name}".format(table_name=table_name))
     sql = """CREATE TABLE IF NOT EXISTS {table_name} (Id INT AUTO_INCREMENT PRIMARY KEY,
         time VARCHAR(255),
-        nodeId VARCHAR(255), 
-        firmware VARCHAR(255),
         Battery VARCHAR(255),
-        counter VARCHAR(255),
         source_address VARCHAR(255),
         rms_x VARCHAR(255),
         rms_y VARCHAR(255),
@@ -76,12 +70,10 @@ def insert_data_cur(conn, motor1_cur,table_name):
     now = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     mycursor = conn.cursor()
     sql = """INSERT INTO {table_name}
-        (time,nodeId,firmware,Battery, 
-        counter, source_address, I_a, I_b, I_c)
-         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    value = (motor1_cur[0], motor1_cur[1], motor1_cur[2], motor1_cur[3],
-             motor1_cur[4],
-             motor1_cur[5], motor1_cur[6], motor1_cur[7], motor1_cur[8])
+        (time, Battery, source_address, I_a, I_b, I_c)
+         VALUES (%s, %s, %s, %s, %s, %s)"""
+    value = (motor1_cur[0], motor1_cur[1], motor1_cur[2],
+             motor1_cur[3], motor1_cur[4], motor1_cur[5])
     try:
         mycursor.execute(sql.format(table_name=table_name), value)
         conn.commit()
@@ -91,32 +83,33 @@ def insert_data_cur(conn, motor1_cur,table_name):
         print("Message", err.msg)
 
 
+
 def insert_data_vib(conn, motor1_vib,table_name):
     now = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     mycursor = conn.cursor()
     sql = """INSERT INTO {table_name}
-        (time,nodeId,firmware,Battery, 
-        counter, source_address, rms_x, rms_y,
-         rms_z, max_x, max_y, max_z,
-          min_x, min_y, min_z, temperature)
-         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    value = (motor1_vib[0], motor1_vib[1], motor1_vib[2], motor1_vib[4][1:5],
-             motor1_vib[5], motor1_vib[7], motor1_vib[9], motor1_vib[10],
-             motor1_vib[11], motor1_vib[12], motor1_vib[13], motor1_vib[14],
-             motor1_vib[15], motor1_vib[16], motor1_vib[17], motor1_vib[18])
+        (time, Battery, source_address, 
+         rms_x, rms_y, rms_z, 
+         max_x, max_y, max_z,
+         min_x, min_y, min_z, temperature)
+         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    value = (motor1_vib[0], motor1_vib[1], motor1_vib[2],
+             motor1_vib[3], motor1_vib[4], motor1_vib[5],
+             motor1_vib[6], motor1_vib[7], motor1_vib[8],
+             motor1_vib[9], motor1_vib[10], motor1_vib[11], motor1_vib[12])
     try:
         mycursor.execute(sql.format(table_name=table_name), value)
         conn.commit()
         print("Vib "+ table_name +" inserted " + now)
+
     except mysql.connector.Error as err:
         print(err)
         print("Message", err.msg)
 
 
+
 # conn = connect_database()
 # create_table_vib(conn, "motor2_vib")
 # create_table_vib(conn, "motor1_vib")
-#
-#
 # create_table_cur(conn, "motor1_cur")
 # insert_data(conn)
