@@ -100,7 +100,7 @@ def my_custom_callback(sensor_data):
             if count ==1:
                 print("3E83")
                 # print(sensorlist1)
-                Database.insert_data_vib(conn, sensorlist1, "motor1_cur")
+                Database.insert_data_cur(conn, sensorlist1, "motor1_cur")
 
         elif sensor_data['source_address'] == str("0013A20041D2067A"):
             datalist = re.split(': |, ', str(sensor_data['sensor_data']))
@@ -126,6 +126,9 @@ def my_custom_callback(sensor_data):
             # print(str(sensor_data['sensor_data']['temperature']))
 
             # data append
+
+
+
             append_data(sensorlist, str(sensor_data['battery_percent'][0:4]))
             append_data(sensorlist, str(sensor_data['source_address']))
             append_data(sensorlist, str(sensor_data['sensor_data']['rms_x']))
@@ -141,9 +144,9 @@ def my_custom_callback(sensor_data):
 
             if count ==1:
                 print("067A")
-                print(sensorlist)
+                # print(sensorlist[6])
                 Database.insert_data_vib(conn, sensorlist, "motor1_vib")
-            #   print(sensorlist)
+                # print(sensorlist)
             # elif count ==9:
             #     print(sensorlist)
 

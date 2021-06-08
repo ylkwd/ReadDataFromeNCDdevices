@@ -6,7 +6,7 @@ import datetime
 def connect_database():
     try:
         cnx = mysql.connector.connect(user='root',
-                                      password='123456',
+                                      password='123456789',
                                       database='mando',
                                       host='127.0.0.1',
                                       auth_plugin='mysql_native_password')
