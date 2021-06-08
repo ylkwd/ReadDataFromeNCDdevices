@@ -43,12 +43,31 @@ def my_custom_callback(sensor_data):
         # About Motor 1
         # if sensor_data['sensor_type_id'] == 12 and sensor_data['source_address'] == str("0013A20041D20683"):
         if sensor_data['source_address'] == str("0013A20041D20683"):
-            print("0683")
-            list0 = data_mysql(now, sensor_data)
+            # print("0683")
+            # list0 = data_mysql(now, sensor_data)
+            sensorlist2 = [now]
+
+            append_data(sensorlist2, str(sensor_data['battery_percent'][0:4]))
+            append_data(sensorlist2, str(sensor_data['source_address']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['rms_x']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['rms_y']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['rms_z']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['max_x']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['max_y']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['max_z']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['min_x']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['min_y']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['min_z']))
+            append_data(sensorlist2, str(sensor_data['sensor_data']['temperature']))
 
             # Database.insert_data_vib(conn, list0,"motor2_vib")
             # print(list0)
             #testing
+
+            if count ==1:
+                print("0683")
+                # print(sensorlist2)
+                Database.insert_data_vib(conn, sensorlist2, "motor2_vib")
 
         elif sensor_data['source_address'] == str("0013A20041D63E83"):
 
@@ -74,10 +93,14 @@ def my_custom_callback(sensor_data):
             append_data(sensorlist1, str(sensor_data['sensor_data']['channel_2']))
             append_data(sensorlist1, str(sensor_data['sensor_data']['channel_3']))
 
-            # print(sensorlist)
-            print("3E83")
+            # print(sensorlist1)
+
             # list = data_mysql(now, sensor_data)
             # Database.insert_data_cur(conn, sensorlist1,"motor1_cur")
+            if count ==1:
+                print("3E83")
+                # print(sensorlist1)
+                Database.insert_data_vib(conn, sensorlist1, "motor1_cur")
 
         elif sensor_data['source_address'] == str("0013A20041D2067A"):
             datalist = re.split(': |, ', str(sensor_data['sensor_data']))
