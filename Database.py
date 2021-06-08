@@ -6,7 +6,7 @@ import datetime
 def connect_database():
     try:
         cnx = mysql.connector.connect(user='root',
-                                      password='123456789',
+                                      password='123456',
                                       database='mando',
                                       host='127.0.0.1',
                                       auth_plugin='mysql_native_password')
@@ -66,7 +66,7 @@ def create_table_vib(conn, table_name):
     print("Table is created")
 
 
-def insert_data_cur(conn, motor1_cur,table_name):
+def insert_data_cur(conn, motor1_cur, table_name):
     now = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     mycursor = conn.cursor()
     sql = """INSERT INTO {table_name}
@@ -77,14 +77,13 @@ def insert_data_cur(conn, motor1_cur,table_name):
     try:
         mycursor.execute(sql.format(table_name=table_name), value)
         conn.commit()
-        print("Cur "+ table_name +" inserted " + now)
+        print("Cur " + table_name + " inserted " + now)
     except mysql.connector.Error as err:
         print(err)
         print("Message", err.msg)
 
 
-
-def insert_data_vib(conn, motor1_vib,table_name):
+def insert_data_vib(conn, motor1_vib, table_name):
     now = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
     mycursor = conn.cursor()
     sql = """INSERT INTO {table_name}
@@ -100,12 +99,11 @@ def insert_data_vib(conn, motor1_vib,table_name):
     try:
         mycursor.execute(sql.format(table_name=table_name), value)
         conn.commit()
-        print("Vib "+ table_name +" inserted " + now)
+        print("Vib " + table_name + " inserted " + now)
 
     except mysql.connector.Error as err:
         print(err)
         print("Message", err.msg)
-
 
 
 # conn = connect_database()
